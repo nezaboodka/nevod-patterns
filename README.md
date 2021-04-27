@@ -1,7 +1,7 @@
 # Nevod Basic Patterns
 
 The Nevod technology provides you with pattern-based text search. It is accomplished with the library
-of the basic patterns written in Nevod languags and aimed to extract dates, times, emails, URLs,
+of the basic patterns written in Nevod language and aimed to extract dates, times, emails, URLs,
 and other common entities in text.
 
 Learn more about Nevod and try it yourself on the [official site](https://nevod.io).
