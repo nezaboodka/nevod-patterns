@@ -4,7 +4,6 @@
 @require "Basic.Number.np";
 @require "Basic.HashTag.np";
 @require "Basic.Url.np";
-// @require "Basic.BankCardNumber/BankCardNumber.np";
 
 @namespace Basic.PhoneNumber {
     @search @pattern Target = {PhoneNumber, ContextualPhoneNumber};
@@ -34,7 +33,7 @@
         Basic.Number.ThousandSeparatedFloat,
         Basic.Date.Target,
         Basic.Time.Target,
-        CreditCardLike /* Basic.BankCardNumber */,
+        CreditCardLike,
         SSNLike,
         '-' + Num(10),
         Num + '%',
