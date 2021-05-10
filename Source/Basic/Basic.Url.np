@@ -2,24 +2,35 @@
 @require "Basic.IpAddress.np";
 
 @namespace Basic.Url {
-    @search @pattern Target(Result1, Result2, Result3) = { 
-        UrlWithOptionalMethod(Result1: R),
-        UrlWithMethod(Result2: R),
-        IpUrl(Result3: R)
+    @search @pattern Target = { 
+        UrlWithOptionalMethod,
+        UrlWithMethod,
+        IpUrl
     };
     
     // Root
-    UrlWithOptionalMethod(R) = ExtractionRestriction + R: {
-        ?Method + Domain + PortPathQuery,
-        ~TimeAmPm
-    } + UrlSuffix;
+    UrlWithOptionalMethod = Result @inside ExtractionRestriction + Result + UrlSuffix
+    @where
+    {
+        Result = {
+            ?Method + Domain + PortPathQuery,
+            ~TimeAmPm
+        };
+    };
     
     // Root
-    UrlWithMethod(R) = R: (Method + Domain + PortPathQuery) + UrlSuffix;
+    UrlWithMethod = Result @inside Result + UrlSuffix
+    @where
+    {
+        Result = Method + Domain + PortPathQuery;
+    };
     
     // Root
-    IpUrl(R) = ExtractionRestriction + R: (Method + {Basic.IpAddress.IpAddressV4, 'localhost'} + PortPathQuery)
-        + UrlSuffix;
+    IpUrl = Result @inside ExtractionRestriction + Result + UrlSuffix
+    @where
+    {
+        Result = Method + {Basic.IpAddress.IpAddressV4, 'localhost'} + PortPathQuery;
+    };
         
     // Root (negative)
     TimeAmPm = Basic.Time.Num12 + '.' + {'am', 'pm'};   
@@ -44,7 +55,11 @@
     Method = {'http', 'https' , 'ftp', 'mailto', 'file', 'data', 'irc'} + '://';
     
     Port = ':' + Num;
-    Path = '/' + [0+ {Word, '/', '_', '+', '-', '%', '.', '#', '!', ':'}];
+    Path = '/' + ?([0+ {AllowedTrailing, '.', '!', ':'}] + AllowedTrailing)
+    @where
+    {
+        AllowedTrailing = {Word, '/', '_', '+', '-', '%', '#'};
+    };
 
     Query = '?' + ?(Param + [0+ '&' + Param])
     @where
