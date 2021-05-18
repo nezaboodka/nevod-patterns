@@ -116,7 +116,7 @@
     ConnectNum = {
         Basic.ConnectNum.Generated.ConnectHourAndMinute + Space + Desc,
         Basic.ConnectNum.Generated.ConnectHourAndMinuteAmPm,
-        Basic.ConnectNum.Generated.ConnectHourAndMinuteAP + ?'.' + ?Space + 'm' + ?'.'
+        Basic.ConnectNum.Generated.ConnectHourAndMinuteAP + ?('.' + ?Space) + 'm' + ?'.'
     };
 
     // ----------------------------------------------
@@ -163,8 +163,8 @@
     // (?<suffix>{AmRegex}|{PmRegexFull}|{OclockRegex})
     TimeSuffixFull = { Am, PmFull, Oclock };
 
-    AmDesc = { 'am', 'a' + ?Space + ?'.' + ?Space + 'm' + ?Space + ?'.' };
-    PmDesc = { 'pm', 'p' + ?Space + ?'.' + ?Space + 'm' + ?Space + ?'.' };
+    AmDesc = { 'am', 'a' + ?Space + ?('.' + ?Space) + 'm' + ?Space + ?'.' };
+    PmDesc = { 'pm', 'p' + ?Space + ?('.' + ?Space) + 'm' + ?Space + ?'.' };
     AmPmDesc = 'ampm';
     // (?<oclock>o\s*((’|‘|')\s*)?clock|sharp)
     Oclock = { 'o' + ?Space + {'’', '‘', "'"} + ?Space + 'clock', 'oclock', 'sharp' };

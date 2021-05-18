@@ -22,7 +22,7 @@
         Basic.Date.Target + Connector + Basic.Time.Target + ?(Space + Basic.Date.Year),
         Basic.Time.Target + Connector + Basic.Date.Target
     } + ?(Space + Suffix) @where {
-        Connector = ?Space + ?{Basic.DateTime.Connector, Preposition} + ?Space;
+        Connector = ?Space + ?({Basic.DateTime.Connector, Preposition} + ?Space);
     };
 
     // Root

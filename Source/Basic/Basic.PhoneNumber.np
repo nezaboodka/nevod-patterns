@@ -4,25 +4,26 @@
 @require "Basic.Number.np";
 @require "Basic.HashTag.np";
 @require "Basic.Url.np";
+// @require "Basic.BankCardNumber/BankCardNumber.np";
 
 @namespace Basic.PhoneNumber {
     @search @pattern Target = {PhoneNumber, ContextualPhoneNumber};
 
-    ContextualPhoneNumber = LongPhoneNumber @inside 'phone number is' + SLW + LongPhoneNumber
+    ContextualPhoneNumber = LongPhoneNumber @inside 'phone number is' + ?Space + LongPhoneNumber
     @where {
-        LongPhoneNumber = ?('(' + SLW + Num + SLW + ')' + Delimiter) + ShortNumber;
+        LongPhoneNumber = ?('(' + ?Space + Num + ?Space + ')' + Delimiter) + ShortNumber;
         ShortNumber = Num + [0+ Delimiter + Num] + ?(Delimiter + NumAlpha);
     };
 
     PhoneNumber = {
         InternationalNotation,
         NationalNotation,
-        '+' + SLW + CountryCodeWithSuffix, // +123456
-        ?('+' + SLW) + CountryCodeWithSuffix6 + [0+ Delimiter + Num], // 32123456
-        ?('+' + SLW) + CountryCodeWithSuffix + Delimiter + Num(3+) + [0+ Delimiter + Num], // 375201 234567
+        '+' + ?Space + CountryCodeWithSuffix, // +123456
+        ?('+' + ?Space) + CountryCodeWithSuffix6 + [0+ Delimiter + Num], // 32123456
+        ?('+' + ?Space) + CountryCodeWithSuffix + Delimiter + Num(3+) + [0+ Delimiter + Num], // 375201 234567
         '00' + Delimiter + InternationalNotation, // 00375291234567
         '0'*(Num, 5+) + [0+ Delimiter + Num(1-9)], // 012345, 001234
-        //~CountryCodeWithSuffix + [1+ Delimiter + Num] + SLW + '=', // NOTE: affects performance
+        //~CountryCodeWithSuffix + [1+ Delimiter + Num] + ?Space + '=', // NOTE: affects performance
         ~'0' + [1+ Delimiter + '0'], // 0 0 0 ... 0
         ~Num(6+) + Delimiter + Num(13+), // Too long numbers (123456 1234567890123)
         ~Basic.Date.YearSpan // 2010-16, 2008/2010
@@ -33,7 +34,7 @@
         Basic.Number.ThousandSeparatedFloat,
         Basic.Date.Target,
         Basic.Time.Target,
-        CreditCardLike,
+        CreditCardLike /* Basic.BankCardNumber */,
         SSNLike,
         '-' + Num(10),
         Num + '%',
@@ -46,12 +47,12 @@
         'account' + ?' number' + ?' is' + Space + Num
     };
 
-    InternationalNotation = {ParenthesizedCountryCode, ?('+' + SLW) + {CountryCode, CountryCodeWithSuffix}} + Delimiter + {NationalNotation, Num(6)};
-    ParenthesizedCountryCode = '(' + SLW + ?'+' + SLW + CountryCode + SLW + ')';
+    InternationalNotation = {ParenthesizedCountryCode, ?('+' + ?Space) + {CountryCode, CountryCodeWithSuffix}} + Delimiter + {NationalNotation, Num(6)};
+    ParenthesizedCountryCode = '(' + ?Space + ?('+' + ?Space) + CountryCode + ?Space + ')';
 
     NationalNotation = {
         SimplePhoneNumber,
-        ?('(' + SLW) + Num(1-5) + SLW + ')' + Delimiter + {SimplePhoneNumber, Num(5+)} + ?ExtensionNumber
+        ?('(' + ?Space) + Num(1-5) + ?Space + ')' + Delimiter + {SimplePhoneNumber, Num(5+)} + ?ExtensionNumber
     };
 
     SimplePhoneNumber = {
@@ -60,15 +61,13 @@
         Num + [1+ Delimiter + Num(3+)],
         Num(2+) + [1+ Delimiter + Num],
         [2+ Num + Delimiter] + ExtensionNumber
-        //~Num(2+) + [1+ Delimiter + Num] + SLW + '=' // NOTE: affects performance
+        //~Num(2+) + [1+ Delimiter + Num] + ?Space + '=' // NOTE: affects performance
     };
 
-    ExtensionNumber = {'extension', 'ext', 'ext.', 'x'} + SLW + Num;
+    ExtensionNumber = {'extension', 'ext', 'ext.', 'x'} + ?Space + Num;
 
-    Delimiter = SLW + ?DelimiterSymbol + SLW;
+    Delimiter = ?Space + ?(DelimiterSymbol + ?Space);
     DelimiterSymbol = {'-', '.', '/'};
-
-    SLW = ?Space; // Single line whitespace
 
     CreditCardLike = Num(4) + [2 {Space, '-'} + Num(4)] + {Space, '-'} + Num(3-4);
     SSNLike = Num(3) + '-' + Num(2) + '-' + Num(4);

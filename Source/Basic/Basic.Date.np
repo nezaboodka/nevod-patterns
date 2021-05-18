@@ -43,8 +43,8 @@
     DateExtractor1 =
         ?(WeekDay + ?Space + ?({',', '-'} + ?Space)) + 
         {
-            MonthName + ?'.' + ?Space + ?{'\', '/', '.', ',', '-'} + ?Space + Day,
-            '(' + MonthName + ?Space + ?{'-', '.'} + ?Space + Day + ')'
+            MonthName + ?'.' + ?Space + ?({'\', '/', '.', ',', '-'} + ?Space) + Day,
+            '(' + MonthName + ?Space + ?({'-', '.'} + ?Space) + Day + ')'
         }
         + ?(?Space + '(' + ?Space + WeekDay + ?Space + ')') + ?DateExtractorYearTerm;
     
@@ -255,7 +255,7 @@
     
     
     // (\s*((,?\s*on)|[-—–]))
-    PrefixWeekDay = ?Space + { ?',' + ?Space + 'on', '-', '—', '–' };
+    PrefixWeekDay = ?Space + { ?',' + (?Space + 'on'), '-', '—', '–' };
     
     // ({LastNegPrefix}last|previous|{PastPrefixRegex})\b
     PreviousPrefix = { LastNotVerb, 'previous', PastPrefix };

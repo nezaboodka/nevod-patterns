@@ -10,8 +10,7 @@
             Num,
             Basic.Number.IntegerNumber,
             Basic.Number.FloatNumber,
-            ~Basic.Number.NumberOrdinal
-        };
+            ~Basic.Number.NumberOrdinal};
         ISOCode = {
             AngolanNewKwanza, AngolanReadjustedKwanza, ArgentineAustral, ArgentinePeso, ArgentinePesoLey,
             ArmenianDram, ArubanFlorin, AustralianDollar, AustrianSchilling, AzerbaijaniManat,
